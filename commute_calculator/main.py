@@ -1,7 +1,7 @@
 import json
 from dataclasses import dataclass
 
-from .mapping import Location, Distance, Mapper
+from commute_calculator.mapping import Location, Distance, Mapper
 
 
 @dataclass
@@ -41,28 +41,14 @@ def run():
     mapper = Mapper()
 
     for h in homes:
-        print(h)
-    for d in destinations:
-        print(d)
+        print(f"{h.name}: {h.address}")
+        for d in destinations:
+            from_loc = mapper.geocode(h.address)
+            to_loc = mapper.geocode(d.address)
+            distance = mapper.get_distance(from_loc, to_loc)
+            print(f"  to {d.name:<20} {distance}")
+    mapper.save_caches()
 
 
 if __name__ == '__main__':
     run()
-
-    # data = load_data()
-    #
-    # with open('destinations.json', 'r') as in_file:
-    #     destinations = json.load(in_file)
-
-    # for location in data:
-    #     for dest in destinations:
-    #         if dest['name'] not in location['destinations']:
-    #             location['destinations'][dest['name']] = 0
-
-    # print(data)
-    # for d in data:
-    #     print(d)
-    #     for dest in d.destinations:
-    #         print(f"  {dest}: {d['destinations'][dest]}")
-
-    # save_data(data)

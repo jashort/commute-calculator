@@ -6,7 +6,7 @@ from json import JSONDecodeError
 
 import requests
 
-from .data import EnhancedJSONEncoder
+from commute_calculator.data import EnhancedJSONEncoder
 
 
 @dataclass
@@ -20,6 +20,11 @@ class Location:
 class Distance:
     meters: float
     seconds: float
+
+    def __str__(self):
+        miles = round(self.meters * 0.0006213712, 1)
+        minutes = round(self.seconds / 60, 2)
+        return f"{miles} miles ({minutes} minutes)"
 
 
 class Mapper:
@@ -89,6 +94,10 @@ class Mapper:
         loc = Location(first["lat"], first["lon"], first["display_name"])
         self.geocode_cache[address] = loc
         return loc
+
+    def save_caches(self):
+        self.save_geocode_cache()
+        self.save_distance_cache()
 
 
 if __name__ == '__main__':
